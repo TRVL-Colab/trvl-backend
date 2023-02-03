@@ -18,7 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
-            $table->string('username');
+            $table->string('slug')->unique();
+            $table->string('username')->unique();
             $table->string('gender')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('picture')->nullable();
@@ -26,7 +27,9 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('verify')->default(0);
+            $table->boolean('is_admin')->default(0);
+            $table->enum('status', ['active','inactive'])->default('active');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

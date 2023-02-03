@@ -18,8 +18,10 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'username',
+        'slug',
         'email',
         'password',
+        'status',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -28,17 +30,8 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-    
+  
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
