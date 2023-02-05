@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\VerifyUserJobs;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
+use App\Jobs\PasswordResetJob;
+use App\Traits\ApiResponseWithHttpSTatus;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class AuthController extends Controller
@@ -51,10 +60,16 @@ class AuthController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
         }
+
         $user = User::create(array_merge(
                     $validator->validated(),
-                    ['password' => bcrypt($request->password)]
+                    ['password' => bcrypt($request->password),'slug'=>Str::random(15),'token'=>Str::random(20),'status'=>'active']
                 ));
+  
+        if($user){
+            $details = ['username'=>$user->username, 'email'=>$user->email,'hashEmail'=>Crypt::encryptString($user->email),'token'=>$user->token];
+            dispatch(new VerifyUserJobs($details));
+        }       
         return response()->json([
             'message' => 'User successfully registered',
             'user' => $user
