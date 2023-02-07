@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('email')->unique();
+            $table->string('token')->nullable();
             $table->boolean('verify')->default(0);
             $table->boolean('is_admin')->default(0);
             $table->enum('status', ['active','inactive'])->default('active');
