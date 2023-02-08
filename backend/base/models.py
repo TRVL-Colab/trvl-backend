@@ -56,6 +56,18 @@ class Destination(models.Model):
     def __str__(self):
         return str(self.name)
 
+class Document(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    document_number = models.CharField(max_length=100, blank=True)
+    document_type = CharField(max_length=255)
+    place_of_issue = CharField(max_length=255)
+    date_of_issue = models.DateField()
+    date_of_expiration = models.DateField()
+    soft_copy = models.CharField(max_length=200, null=True, blank=True)
+    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    _id = models.AutoField(primary_key=True, editable=False)
 
     
 
