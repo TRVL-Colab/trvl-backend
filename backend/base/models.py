@@ -21,7 +21,8 @@ class Trip(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     flag = models.ImageField(null=True, blank=True, default='/placeholder.png')
-    code = models.IntegerField(null=True, blank=True, default=0)
+    postalCode = models.CharField(max_length=200, null=True, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
@@ -31,6 +32,7 @@ class State(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     city_picture = models.ImageField(null=True, blank=True, default='/placeholder.png')
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
@@ -40,6 +42,7 @@ class City(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     city_picture = models.ImageField(null=True, blank=True, default='/placeholder.png')
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
@@ -51,6 +54,7 @@ class Destination(models.Model):
     description = models.TextField(null=True, blank=True)
     trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
     
     def __str__(self):
@@ -69,6 +73,9 @@ class Document(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
+    def __str__(self):
+        return str(self.name)
+
 class Photo(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     image = models.CharField(max_length=200, null=True, blank=True)
@@ -77,6 +84,9 @@ class Photo(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.name)
 
 class Transportation(models.Model):
     mode = models.CharField(max_length=200, null=True, blank=True) # Transportation mode  : Flight Bus Train
@@ -90,7 +100,8 @@ class Transportation(models.Model):
     paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
-    
 
+    def __str__(self):
+        return str(self.name)
     
 
