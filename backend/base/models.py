@@ -69,6 +69,14 @@ class Document(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
+class Photo(models.Model):
+    name = models.CharField(max_length=200, null=True, blank=True)
+    image = models.CharField(max_length=200, null=True, blank=True)
+    caption = CharField(max_length=200, null=True, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     
 
     
