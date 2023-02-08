@@ -24,10 +24,6 @@ def getTrips(request):
 
 @api_view(['GET'])
 def getTrip(request, pk):
-    trip = None
-    for i in trips:
-        if i['_id'] == pk:
-            trip = i
-            break
-        
-    return Response(trip)    
+    trip = Trip.objects.get(_id=pk)
+    serializer = TripSerializer(trip, many=False)
+    return Response(serializer.data) 
