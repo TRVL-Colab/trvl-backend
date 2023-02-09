@@ -4,7 +4,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Trip
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
     _id = serializers.SerializerMethodField(read_only=True)
@@ -42,7 +41,14 @@ class UserSerializerWithToken(UserSerializer):
 
 
 class TripSerializer(serializers.ModelSerializer):
-   
-      class Meta:
+    reviews = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
         model = Trip
         fields = '__all__'
+
+
+    def get_user(self, obj):
+        user = obj.user
+        serializer = UserSerializer(user, many=False)
+        return serializer.data
