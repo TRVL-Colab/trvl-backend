@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from . trips import trips
 from .models import Trip
-from .serializers import TripSerializer
+from .serializers import TripSerializer, UserSerializer, UserSerializerWithToken
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -14,26 +14,30 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 # Create your views here.
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
+    def validate(self, attrs):
+        data = super().validate(attrs)
 
-        # Add custom claims
-        token['username'] = user.username
-        token['message'] = 'Hello world'
-        # ...
+        serializer = UserSerializerWithToken(self.user).data
+        for k, v in serializer.items():
+            data[k] = v
 
-        return token
+        return data
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
 
 @api_view(['GET'])
 def getRoutes(request):
     routes = [
     ]
     return Response(routes)
+
+@api_view(['GET'])
+def getUserProfile(request):
+    user = request.user
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def getTrips(request):
